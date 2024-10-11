@@ -1,5 +1,3 @@
-import Node from './node.js';
-
 export default class Board {
 	constructor() {
 		this.board = this.createBoard();
@@ -28,7 +26,37 @@ export default class Board {
 		}
 	}
 
-	knightMoves(startSquare, endSquare) {}
+	knightMoves(startSquare, endSquare) {
+		const queue = [[startSquare]];
+		const visitedSquares = [];
+
+		while (queue.length > 0) {
+			const currentPath = queue.shift();
+			const currentSquare = currentPath[currentPath.length - 1];
+
+			if (currentSquare[0] === endSquare[0] && currentSquare[1] === endSquare[1]) {
+				return this.formatPath(currentPath);
+			}
+
+			const squareKey = currentSquare.toString();
+			if (!visitedSquares.includes(squareKey)) {
+				visitedSquares.push(squareKey);
+
+				const possibleMoves = this.possibleKnightMoves(currentSquare);
+
+				for (const possibleMove of possibleMoves) {
+					//Copy current Path
+					const newPath = currentPath.slice();
+
+					//add the new Move
+					newPath.push(possibleMove);
+					queue.push(newPath);
+				}
+			}
+		}
+
+		return null; // Wenn kein Pfad gefunden wurde
+	}
 
 	//possibleKnightMoves([3,3])
 	possibleKnightMoves(startSquare) {
@@ -57,10 +85,10 @@ export default class Board {
 			}
 		}
 
-		possibleKnightMovesArr.forEach((element) => {
-			console.log(element);
-		});
-
 		return possibleKnightMovesArr;
+	}
+
+	formatPath(path) {
+		return path.map((square) => `(${square[0]}, ${square[1]})`).join(' -> ');
 	}
 }

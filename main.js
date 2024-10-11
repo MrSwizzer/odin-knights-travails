@@ -1,7 +1,5 @@
 import Board from './board.js';
 
 const board = new Board();
-board.logBoard();
-console.log('\n');
-
-board.possibleKnightMoves([3, 3]);
+const nightMoves = board.knightMoves([0, 0], [7, 7]);
+console.log(nightMoves);
